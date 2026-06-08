@@ -330,8 +330,8 @@ function DualTrendPanel({ trends }) {
   const daily = trends?.daily || [];
   const max = Math.max(1, ...daily.flatMap(row => [row.evening_units, row.sold]));
   const pointsFor = (field) => daily.map((row, index) => {
-    const x = daily.length === 1 ? 0 : (index / (daily.length - 1)) * 520;
-    const y = 170 - (Number(row[field] || 0) / max) * 145;
+    const x = daily.length === 1 ? 0 : (index / (daily.length - 1)) * 100;
+    const y = 94 - (Number(row[field] || 0) / max) * 82;
     return `${index === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
   }).join(' ');
   const latest = daily.at(-1) || {};
@@ -348,21 +348,31 @@ function DualTrendPanel({ trends }) {
           <span className="status-pill"><span className="h-2 w-2 rounded-full bg-red-600" /> Sold {latest.sold || 0}</span>
         </div>
       </div>
-      <svg viewBox="0 0 520 190" className="h-64 w-full" role="img" aria-label="14-day inventory and sales trend">
-        {[0, 1, 2, 3].map(index => (
-          <line key={index} x1="0" x2="520" y1={25 + index * 45} y2={25 + index * 45} stroke="#e2e8f0" strokeWidth="1" />
-        ))}
-        <path d={pointsFor('evening_units')} fill="none" stroke="#2563eb" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-        <path d={pointsFor('sold')} fill="none" stroke="#dc2626" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-        {daily.map((row, index) => {
-          const x = daily.length === 1 ? 0 : (index / (daily.length - 1)) * 520;
-          return (
-            <text key={row.date} x={x} y="188" textAnchor={index === 0 ? 'start' : index === daily.length - 1 ? 'end' : 'middle'} className="fill-slate-400 text-[11px] font-semibold">
+      <div className="pt-3">
+        <svg
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          className="h-52 w-full sm:h-56"
+          role="img"
+          aria-label="14-day inventory and sales trend"
+        >
+          {[0, 1, 2, 3].map(index => (
+            <line key={index} x1="0" x2="100" y1={14 + index * 24} y2={14 + index * 24} stroke="#e2e8f0" strokeWidth="0.75" vectorEffect="non-scaling-stroke" />
+          ))}
+          <path d={pointsFor('evening_units')} fill="none" stroke="#2563eb" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+          <path d={pointsFor('sold')} fill="none" stroke="#dc2626" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+        </svg>
+        <div
+          className="mt-1 grid text-[10px] font-semibold text-slate-400 sm:text-xs"
+          style={{ gridTemplateColumns: `repeat(${Math.max(1, daily.length)}, minmax(0, 1fr))` }}
+        >
+          {daily.map((row, index) => (
+            <span key={row.date} className={`${index === 0 ? 'text-left' : index === daily.length - 1 ? 'text-right' : 'text-center'} ${index % 2 === 1 ? 'invisible sm:visible' : ''}`}>
               {row.date.slice(5)}
-            </text>
-          );
-        })}
-      </svg>
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
