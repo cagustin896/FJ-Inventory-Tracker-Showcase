@@ -88,7 +88,9 @@ export default function Settings() {
     setNotice('Workspace preferences saved on this browser.');
   };
 
-  const handleAdd = async () => {
+  const handleAdd = async (event) => {
+    event?.preventDefault();
+    if (saving) return;
     if (!newName.trim()) return;
     setSaving(true);
     setError('');
@@ -346,23 +348,22 @@ export default function Settings() {
             <FolderDown size={18} className="text-slate-400" />
           </div>
 
-          <div className="space-y-3">
+          <form className="space-y-3" onSubmit={handleAdd}>
             <input
               className="form-input"
               placeholder="Branch name, e.g. Cebu IT Park 2"
               value={newName}
               onChange={e => setNewName(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleAdd()}
             />
             <button
-              onClick={handleAdd}
+              type="submit"
               disabled={saving || !newName.trim()}
               className="btn-primary flex w-full items-center justify-center gap-2"
             >
               <Plus size={16} />
               Add Branch
             </button>
-          </div>
+          </form>
         </aside>
       </div>
     </div>
