@@ -1,0 +1,35 @@
+{
+  "name": "fj-inventory",
+  "version": "1.0.0",
+  "description": "F&J Gadgets Inventory Management System",
+  "main": "server/index.js",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "client": "npm --prefix client run dev",
+    "build": "npm --prefix client install && npm --prefix client run build",
+    "test:local-db": "node tests/local-db.test.js",
+    "test:demo-seed": "node tests/demo-seed.test.js",
+    "test:dashboard-trends": "node tests/dashboard-trends.test.js",
+    "test:settings-summary": "node tests/settings-summary.test.js",
+    "test:reports-summary": "node tests/reports-summary.test.js",
+    "seed:demo": "node scripts/seed-demo.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop fj-inventory",
+    "pm2:restart": "pm2 restart fj-inventory",
+    "pm2:logs": "pm2 logs fj-inventory"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.19.2",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+client/node_modules/
+.env
+.vercel/
+.claude/
+exports/
+server.log
+*.log
+database/
+*.db
+*.sqlite
+client/dist/

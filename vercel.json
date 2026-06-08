@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "framework": null,
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "client/dist",
+  "env": {
+    "VERCEL_SEED_DEMO": "true",
+    "ALLOW_DEMO_SEED": "true",
+    "VERCEL_DEMO_DATE": "2026-06-08"
+  },
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
