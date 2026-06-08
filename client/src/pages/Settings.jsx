@@ -8,6 +8,7 @@ import {
   HardDrive, MonitorCog, Pencil, Plus, RefreshCw,
   ShieldCheck, Trash2, X,
 } from 'lucide-react';
+import { announceBranchesUpdated } from '../branchEvents';
 
 const DEFAULT_PREFS = {
   landingPage: 'dashboard',
@@ -99,6 +100,7 @@ export default function Settings() {
       await addBranch(newName.trim());
       setNewName('');
       await load();
+      announceBranchesUpdated();
       setNotice('Branch added successfully.');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to add branch');
@@ -117,6 +119,7 @@ export default function Settings() {
       setEditId(null);
       setEditName('');
       await load();
+      announceBranchesUpdated();
       setNotice('Branch renamed successfully.');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to rename branch');
@@ -132,6 +135,7 @@ export default function Settings() {
     try {
       await deleteBranch(id);
       await load();
+      announceBranchesUpdated();
       setNotice('Branch deleted successfully.');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to delete branch');

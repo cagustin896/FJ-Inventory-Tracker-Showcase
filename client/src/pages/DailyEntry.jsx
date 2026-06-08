@@ -8,6 +8,7 @@ import {
   getAdjustments, saveAdjustments,
   getModelSuggestions,
 } from '../api';
+import { subscribeToBranchUpdates } from '../branchEvents';
 import {
   Smartphone, RefreshCw, Tablet, Package, ShoppingBag,
   ArrowDownToLine, ArrowUpFromLine, Settings2, Plus, Minus,
@@ -782,12 +783,21 @@ export default function DailyEntry() {
   const [accessoryRows, setAccessoryRows] = useState([]);
   const [adjustmentRows, setAdjustmentRows] = useState([]);
 
-  useEffect(() => {
+  const loadBranches = useCallback(() => {
     getBranches().then(b => {
       setBranches(b);
       if (!branchId && b.length) setBranchId(String(b[0].id));
+      if (branchId && !b.some(branch => String(branch.id) === String(branchId)) && b.length) {
+        setBranchId(String(b[0].id));
+      }
     });
   }, [branchId]);
+
+  useEffect(() => { loadBranches(); }, [loadBranches]);
+
+  useEffect(() => (
+    subscribeToBranchUpdates(loadBranches)
+  ), [loadBranches]);
 
   const loadData = useCallback(async () => {
     if (!branchId || !date) return;

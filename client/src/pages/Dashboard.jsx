@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getDashboard, getDashboardBreakdown } from '../api';
+import { subscribeToBranchUpdates } from '../branchEvents';
 import {
   Smartphone, RefreshCw, Tablet, Package, ShoppingBag,
   ArrowDownToLine, ArrowUpFromLine, X, Sun, Moon, CalendarDays,
@@ -418,6 +419,7 @@ export default function Dashboard() {
   const [modal, setModal] = useState(null);
   const [modalData, setModalData] = useState(null);
   const [modalLoading, setModalLoading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -426,7 +428,11 @@ export default function Dashboard() {
       .then(setData)
       .catch(err => setError(err?.response?.data?.message || 'Could not load dashboard. Is the server running?'))
       .finally(() => setLoading(false));
-  }, [date]);
+  }, [date, refreshKey]);
+
+  useEffect(() => (
+    subscribeToBranchUpdates(() => setRefreshKey(key => key + 1))
+  ), []);
 
   const handleCardClick = useCallback(async (info) => {
     setModal(info);

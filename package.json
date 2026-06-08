@@ -13,6 +13,7 @@
     "build": "npm --prefix client install && npm --prefix client run build",
     "test:local-db": "node tests/local-db.test.js",
     "test:demo-seed": "node tests/demo-seed.test.js",
+    "test:branch-flow": "node tests/branch-flow.test.js",
     "test:dashboard-trends": "node tests/dashboard-trends.test.js",
     "test:settings-summary": "node tests/settings-summary.test.js",
     "test:reports-summary": "node tests/reports-summary.test.js",

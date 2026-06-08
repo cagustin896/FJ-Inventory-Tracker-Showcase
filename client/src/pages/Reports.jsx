@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { getBranches, getReportsSummary } from '../api';
+import { subscribeToBranchUpdates } from '../branchEvents';
 import {
   FileSpreadsheet, ChartColumn, ArrowLeftRight,
   Download, Calendar, Building2, Loader2, ShoppingBag,
@@ -259,12 +260,21 @@ export default function Reports() {
   const [summaryLoading, setSummaryLoading] = useState(true);
   const [summaryError, setSummaryError] = useState('');
 
-  useEffect(() => {
+  const loadBranches = useCallback(() => {
     getBranches().then(b => {
       setBranches(b);
-      if (b.length) setBranchId(String(b[0].id));
+      setBranchId(current => {
+        if (current && b.some(branch => String(branch.id) === String(current))) return current;
+        return b.length ? String(b[0].id) : '';
+      });
     });
   }, []);
+
+  useEffect(() => { loadBranches(); }, [loadBranches]);
+
+  useEffect(() => (
+    subscribeToBranchUpdates(loadBranches)
+  ), [loadBranches]);
 
   useEffect(() => {
     let ignore = false;
